@@ -1,0 +1,32 @@
+{
+  "kind": "collectionType",
+  "collectionName": "service_collections",
+  "info": {
+    "singularName": "service-collection",
+    "pluralName": "service-collections",
+    "displayName": "ServiceCollection"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "title",
+      "required": true
+    },
+    "description": {
+      "type": "blocks"
+    },
+    "services": {
+      "type": "component",
+      "component": "services.service-section",
+      "repeatable": true
+    }
+  }
+}

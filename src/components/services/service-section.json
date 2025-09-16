@@ -1,0 +1,17 @@
+{
+  "collectionName": "components_services_service_sections",
+  "info": {
+    "displayName": "serviceSection",
+    "icon": "bulletList"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "content": {
+      "type": "blocks"
+    }
+  },
+  "config": {}
+}
