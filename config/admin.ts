@@ -9,9 +9,9 @@
  * }
  */
 function getPreviewPathname(uid, { locale, document }) {
-  const slug = document.slug || document.id;
-  const model = uid.split(".").pop();
-  return `/${model}/${slug}`;
+	const slug = document.slug || document.id;
+	const model = uid.split(".").pop();
+	return `/${model}/${slug}`;
 }
 
 export default ({ env }) => ({
@@ -33,15 +33,33 @@ export default ({ env }) => ({
 		nps: env.bool("FLAG_NPS", true),
 		promoteEE: env.bool("FLAG_PROMOTE_EE", true),
 	},
+	// test
 	preview: {
-    enabled: true,
-    config: {
-      allowedOrigins: env("CLIENT_URL"),
-      async handler(uid, { documentId, locale, status }) {
-        const document = await strapi.documents(uid).findOne({ documentId });
-        const pathname = getPreviewPathname(uid, { locale, document });
-        return `${env('CLIENT_URL')}${pathname}`;
-      },
-    },
-  },
+		enabled: env.bool("PREVIEW_ENABLED", false), // Disable preview for now
+		config: {
+			allowedOrigins: env("CLIENT_URL"),
+			async handler(uid, { documentId, locale, status }) {
+				try {
+					const document = await strapi.documents(uid).findOne({ documentId });
+					if (!document) return null;
+					const pathname = getPreviewPathname(uid, { locale, document });
+					return `${env("CLIENT_URL")}${pathname}`;
+				} catch (error) {
+					console.error("Preview handler error:", error);
+					return null;
+				}
+			},
+		},
+	},
+	// preview: {
+	// 	enabled: true,
+	// 	config: {
+	// 		allowedOrigins: env("CLIENT_URL"),
+	// 		async handler(uid, { documentId, locale, status }) {
+	// 			const document = await strapi.documents(uid).findOne({ documentId });
+	// 			const pathname = getPreviewPathname(uid, { locale, document });
+	// 			return `${env("CLIENT_URL")}${pathname}`;
+	// 		},
+	// 	},
+	// },
 });
