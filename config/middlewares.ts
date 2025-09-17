@@ -5,14 +5,23 @@ export default [
   {
     name: 'strapi::cors',
     config: {
-      origin: [
-        'https://iotech-assessment.vercel.app',
-        'http://localhost:3000',
-        'http://localhost:1337',
-        /^https:\/\/iotech-assessment-.*\.vercel\.app$/,
-      ],
-      methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'],
-      headers: ['Content-Type', 'Authorization', 'Origin', 'Accept'],
+      origin: (ctx) => {
+        const origin = ctx.request.header.origin;
+        const allowedOrigins = [
+          'https://iotech-assessment.vercel.app',
+          'http://localhost:3000',
+          'http://localhost:1337'
+        ];
+        if (allowedOrigins.includes(origin)) {
+          return origin;
+        }
+        if (origin && /^https:\/\/iotech-assessment-.*\.vercel\.app$/.test(origin)) {
+          return origin;
+        }
+        return false;
+      },
+      methods: ['GET','POST','PUT','PATCH','DELETE','HEAD','OPTIONS'],
+      headers: ['Content-Type','Authorization','Origin','Accept'],
       keepHeaderOnError: true,
     },
   },
@@ -22,4 +31,4 @@ export default [
   'strapi::session',
   'strapi::favicon',
   'strapi::public',
-]
+];
