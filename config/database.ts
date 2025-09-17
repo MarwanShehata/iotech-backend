@@ -1,6 +1,9 @@
 import path from 'path';
 
 export default ({ env }) => {
+ // If the DATABASE_CLIENT environment variable is not set,
+  // this will default to 'sqlite', which can cause errors in a production environment.
+  // Make sure DATABASE_CLIENT is set to 'postgres' on Railway.
   const client = env('DATABASE_CLIENT', 'sqlite');
 
   const connections = {
@@ -25,11 +28,13 @@ export default ({ env }) => {
     postgres: {
       connection: {
         connectionString: env('DATABASE_URL'),
-        host: env('DATABASE_HOST', 'localhost'),
-        port: env.int('DATABASE_PORT', 5432),
-        database: env('DATABASE_NAME', 'strapi'),
-        user: env('DATABASE_USERNAME', 'strapi'),
-        password: env('DATABASE_PASSWORD', 'strapi'),
+        // The following lines are likely conflicting with the `connectionString`.
+        // In a production environment using a DATABASE_URL, these are not needed and can cause issues.
+        // host: env('DATABASE_HOST', 'localhost'),
+        // port: env.int('DATABASE_PORT', 5432),
+        // database: env('DATABASE_NAME', 'strapi'),
+        // user: env('DATABASE_USERNAME', 'strapi'),
+        // password: env('DATABASE_PASSWORD', 'strapi'),
         ssl: env.bool('DATABASE_SSL', false) && {
           key: env('DATABASE_SSL_KEY', undefined),
           cert: env('DATABASE_SSL_CERT', undefined),
